@@ -1,0 +1,11 @@
+
+PUT http://localhost:5219/Auth/a50d21e4-5c04-4aba-ab6e-ca481bbdf2a6
+Content-Type: application/json
+
+{
+  
+    "Employer": "Tech Company",
+    "Position": "Software Engineer",
+    "StartDate": "2012-06-01",
+    "EndDate": "2014-08-31"
+}

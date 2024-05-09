@@ -1,0 +1,11 @@
+
+@host = http://localhost:5219/
+@employeeId = 77d86b60-0ce9-4846-b36d-87f23f4c4ba3
+POST {{host}}Auth/AddEducationalBackground/{{employeeId}}
+Content-Type: application/json
+
+{
+    "Degree" : "ComputerScience", 
+     "School" : "Earist",
+    "YearGraduated" : "2012"
+}
