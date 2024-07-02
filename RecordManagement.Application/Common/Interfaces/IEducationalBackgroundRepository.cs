@@ -1,4 +1,5 @@
-﻿using RecordManagement.Contracts.DTOs;
+﻿
+using RecordManagement.Domain.Educationalbackgrounds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace RecordManagement.Application.Common.Interfaces
 {
     public interface IEducationalBackgroundRepository
     {
-        Task AddEducationalBackground(Guid employeeId, EducationalBackgroundDto educationalBackground);
+        //  Task AddEducationalBackground(Guid employeeId, EducationalBackgroundDto educationalBackground);
+        Task Add(EducationalBackground educationalBackground, Guid employeeId);
         Task<Employees?> GetEmployeeById(Guid id);
         Task SaveAsync();
 

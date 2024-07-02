@@ -1,9 +1,12 @@
+using ErrorOr;
 using MediatR;
-using RecordManagement.Contracts.DTOs;
+using Skills = RecordManagement.Domain.SkillsAndQualifications.SkillsAndQualification;
 
 namespace RecordManagement.Application.Employee.Commands.SkillsAndQualification;
 
 
 public record AddSkillCommand(
     Guid EmployeeId,
-    SkillsAndQualificationsDto Request) : IRequest<Domain.SkillsAndQualifications.SkillsAndQualification>;
+    string Skill,
+    string Language
+    ) : IRequest<ErrorOr<Skills>>;

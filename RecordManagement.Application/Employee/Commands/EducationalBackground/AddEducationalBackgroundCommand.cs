@@ -1,9 +1,15 @@
+using ErrorOr;
 using MediatR;
-using RecordManagement.Contracts.DTOs;
+using EducationalBackgrounds = RecordManagement.Domain.Educationalbackgrounds.EducationalBackground;
+
+
 
 namespace RecordManagement.Application.Employee.Commands.EducationalBackground;
 
 public record AddEducationalBackgroundCommand(
-Guid EmployeeId, 
-EducationalBackgroundDto Request) :
- IRequest<Domain.Educationalbackgrounds.EducationalBackground>;
+Guid employeeId, 
+string Degree,
+string School,
+int YearGraduated
+) :
+ IRequest<ErrorOr<EducationalBackgrounds>>;

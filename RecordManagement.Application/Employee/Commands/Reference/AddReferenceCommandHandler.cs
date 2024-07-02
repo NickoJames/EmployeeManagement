@@ -1,9 +1,11 @@
+using ErrorOr;
 using MediatR;
 using RecordManagement.Application.Common.Interfaces;
+using References = RecordManagement.Domain.References.Reference;
 
 namespace RecordManagement.Application.Employee.Commands.Reference;
 
-public class AddReferenceCommandHandler : IRequestHandler<AddReferenceCommand , Domain.References.Reference>
+public class AddReferenceCommandHandler : IRequestHandler<AddReferenceCommand, ErrorOr<References>>
 {
     private readonly IAddReferencesRepository _employeeRepository;
 
@@ -12,31 +14,30 @@ public class AddReferenceCommandHandler : IRequestHandler<AddReferenceCommand , 
         _employeeRepository = employeeRepository;
     }
 
-        public async Task<Domain.References.Reference> Handle(AddReferenceCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<References>> Handle(AddReferenceCommand command, CancellationToken cancellationToken)
         {
-
-        var employee = await _employeeRepository.GetEmployeeById(command.EmployeeId);
-        if (employee == null)
+        await Task.CompletedTask;
+        if (string.IsNullOrWhiteSpace(command.Name))
         {
-            throw new Exception($"Employee with ID {command.EmployeeId} not found.");
+            return Error.Validation(code: "Name Invalid", description: "Name cannot be empty.");
         }
- 
-        var employmentHistory = new Domain.References.Reference(
-          
-            
 
-            command.Request.Name,
-            command.Request.ContactInformation
-            
-        );
-        
-        
-        await _employeeRepository.AddReference(command.EmployeeId ,command.Request);
+        if (string.IsNullOrWhiteSpace(command.ContactInformation))
+        {
+            return Error.Validation(code: "ContactInformation Invalid", description: "Contact Information cannot be empty.");
+        }
 
-           
-        await _employeeRepository.SaveAsync();
+        var employementHistory = References.Create(
+            command.Name,
+            command.ContactInformation
+            );
 
-       return employmentHistory;
+        await _employeeRepository.Add(employementHistory , command.EmployeeId);
+
+
+
+
+       return employementHistory;
 
         }
 

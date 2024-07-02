@@ -1,8 +1,6 @@
 
 @host = http://localhost:5219/
-@employeeId =f13fb3cb-0745-45e9-b27f-28970309037b
-
-
+@employeeId =ec56e05a-fe11-4c69-814f-724b1e815daa
 DELETE http://localhost:5219/Auth/{{employeeId}}
 #####
 
@@ -12,13 +10,15 @@ GET http://localhost:5219/Auth/GetAllEmployees/{{employeeId}}
 
 #### Personal info and Contact info
 
-POST http://localhost:5219/Auth/AddEmployee
+POST http://localhost:5219/Auth/AddEmployee/
 Content-Type: application/json
 
 {
   
   "PersonalInformation": {
-    "FullName": "John Doe",
+    "FirstName": "j",
+    "MiddleName": "John Doe",
+    "LastName": "John Doe",
     "DateOfBirth": "1990-05-15",
     "PlaceOfBirth": "New York",
     "Gender": "Male",
@@ -34,8 +34,7 @@ Content-Type: application/json
     "EmailAddress": "john.doe@example.com",
     "PermanentAddress": "123 Main St, Anytown",
     "PresentAddress": "456 Elm St, Anytown"
-  },
-  "Password": "NickoJames"
+  }
 }
 ##### Educational Background
 
@@ -43,9 +42,9 @@ POST {{host}}Auth/AddEducationalBackground/{{employeeId}}
 Content-Type: application/json
 
 {
-    "Degree" : "ComputerScience", 
-     "School" : "PuP",
-    "YearGraduated" : "2012"
+    "Degree" : "Computer Science", 
+     "School" : "Earist",
+    "YearGraduated" : "2013"
 }
 
 ##### Employment Histroy

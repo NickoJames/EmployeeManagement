@@ -1,8 +1,11 @@
+using ErrorOr;
 using MediatR;
-using RecordManagement.Contracts.DTOs;
+using References = RecordManagement.Domain.References.Reference;
 
 namespace RecordManagement.Application.Employee.Commands.Reference;
 
 public record AddReferenceCommand (
     Guid EmployeeId,
-    ReferenceDto Request) : IRequest<Domain.References.Reference>;
+    string Name,
+    string ContactInformation
+    ) : IRequest<ErrorOr<References>>;

@@ -1,6 +1,6 @@
 using MediatR;
 using RecordManagement.Application.Common.Interfaces;
-using RecordManagement.Contracts.DTOs;
+
 
 namespace RecordManagement.Application.Employee.Queries;
 
@@ -16,6 +16,9 @@ public class EmployeeListQueryHandler : IRequestHandler<EmployeeListQuery, IEnum
     public async Task<IEnumerable<Domain.Employees.Employee>> Handle(EmployeeListQuery request, CancellationToken cancellationToken)
     {
         var Id = request.UniqueId;
-        return await _employeeRepository.EmployeeListAsync(Id);
+        var employees = await _employeeRepository.EmployeeListAsync(Id);
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+        return employees;
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
     }
 }

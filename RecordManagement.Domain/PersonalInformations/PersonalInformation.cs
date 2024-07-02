@@ -3,20 +3,24 @@ using System.ComponentModel.DataAnnotations;
 namespace RecordManagement.Domain.PersonalInformations;
  public class PersonalInformation
     { 
-    public Guid Id { get; set; }
-        public string FullName { get; }
-        public DateTime DateOfBirth { get; }
-        public string PlaceOfBirth { get; }
-        public string Gender { get; }
-        public string CivilStatus { get; }
-        public string Citizenship { get; }
-        public int Height { get; }
-        public int Weight { get; }
-        public string BloodType { get; }
+    
+        public string FirstName { get; private set; }
+        public string MidlleName { get; private set; }
+        public string LastName { get; private set; }
+        public DateTime DateOfBirth { get; private set; }
+        public string PlaceOfBirth { get; private set; }
+        public string Gender { get; private set; }
+        public string CivilStatus { get; private set; }
+        public string Citizenship { get; private set; }
+        public int Height { get; private set; }
+        public int Weight { get; private set; }
+        public string BloodType { get; private set; }
 
-        public PersonalInformation(string fullName, DateTime dateOfBirth, string placeOfBirth, string gender, string civilStatus, string citizenship, int height, int weight, string bloodType)
+         private PersonalInformation(string firstName , string middleName, string lastName, DateTime dateOfBirth, string placeOfBirth, string gender, string civilStatus, string citizenship, int height, int weight, string bloodType)
         {
-            FullName = fullName;
+            FirstName = firstName;
+            MidlleName = middleName;
+            LastName = lastName;
             DateOfBirth = dateOfBirth;
             PlaceOfBirth = placeOfBirth;
             Gender = gender;
@@ -26,5 +30,43 @@ namespace RecordManagement.Domain.PersonalInformations;
             Weight = weight;
             BloodType = bloodType;
         }
-          private PersonalInformation() { }
-    }
+
+
+        public static PersonalInformation Create(
+           string firstName,
+           string middleName,
+           string lastName,
+           DateTime dateOfBirth,
+           string placeOfBirth,
+           string gender,
+           string civilStatus,
+           string citizenship,
+           int height,
+           int weight,
+           string bloodType
+            ) 
+            { return new PersonalInformation(
+                firstName,
+                middleName, 
+                lastName, 
+                dateOfBirth, 
+                placeOfBirth, 
+                gender, 
+                civilStatus, 
+                citizenship, 
+                height, 
+                weight, 
+                bloodType); }
+
+
+
+
+
+
+
+
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private PersonalInformation() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+}

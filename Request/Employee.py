@@ -2,8 +2,8 @@ import requests
 import json
 import random
 import uuid
+import pandas as pd
 from faker import Faker
-
 
 fake = Faker()
 
@@ -11,7 +11,7 @@ fake = Faker()
 host = "http://localhost:5219/"
 
 # Number of dummy entries to create
-num_entries = 10000
+num_entries = 1000
 
 # Endpoint paths
 add_employee_endpoint = f"{host}Auth/AddEmployee"
@@ -20,9 +20,10 @@ add_employment_endpoint = f"{host}Auth/AddEmploymentHistory/"
 add_skills_endpoint = f"{host}Auth/AddSkills/"
 add_reference_endpoint = f"{host}Auth/AddReference/"
 
+# Data list to save in Excel
+data = []
 
 def create_dummy_employee():
- 
     employee_id = str(uuid.uuid4())
 
     # Personal and contact information
@@ -52,6 +53,26 @@ def create_dummy_employee():
     response = requests.post(add_employee_endpoint, headers={"Content-Type": "application/json"}, data=json.dumps(personal_info))
     if response.status_code == 200:
         print(f"Added employee: {personal_info['PersonalInformation']['FullName']}")
+
+        # Add the employee details to the data list
+        data.append({
+            "EmployeeID": employee_id,
+            "FullName": personal_info['PersonalInformation']['FullName'],
+            "DateOfBirth": personal_info['PersonalInformation']['DateOfBirth'],
+            "PlaceOfBirth": personal_info['PersonalInformation']['PlaceOfBirth'],
+            "Gender": personal_info['PersonalInformation']['Gender'],
+            "CivilStatus": personal_info['PersonalInformation']['CivilStatus'],
+            "Citizenship": personal_info['PersonalInformation']['Citizenship'],
+            "Height": personal_info['PersonalInformation']['Height'],
+            "Weight": personal_info['PersonalInformation']['Weight'],
+            "BloodType": personal_info['PersonalInformation']['BloodType'],
+            "PhoneNumber": personal_info['ContactInformation']['PhoneNumber'],
+            "MobileNumber": personal_info['ContactInformation']['MobileNumber'],
+            "EmailAddress": personal_info['ContactInformation']['EmailAddress'],
+            "PermanentAddress": personal_info['ContactInformation']['PermanentAddress'],
+            "PresentAddress": personal_info['ContactInformation']['PresentAddress'],
+            "Password": personal_info['Password']
+        })
 
     # Educational background
     education_info = {
@@ -96,6 +117,12 @@ def create_dummy_employee():
     if response.status_code == 200:
         print(f"Added reference for {employee_id}")
 
-# Generate and post 1000 dummy entries
+# Generate and post 10000 dummy entries
 for _ in range(num_entries):
     create_dummy_employee()
+
+# Save the data to an Excel file
+df = pd.DataFrame(data)
+df.to_excel("dummy_employees.xlsx", index=False)
+
+print("Data saved to dummy_employees.xlsx")

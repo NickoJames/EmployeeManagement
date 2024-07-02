@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecordManagement.Application.Common.Interfaces;
-using RecordManagement.Contracts.DTOs;
+
 using RecordManagement.Domain.Employees;
+using RecordManagement.Domain.Employees.ValueObjects;
 using RecordManagement.Domain.References;
 using RecordManagement.Infrastructure.Common.Persistence;
 using System;
@@ -21,26 +22,31 @@ namespace RecordManagement.Infrastructure.References.Persistence
             _dbContext = dbContext;
         }
 
-        public async Task AddReference(Guid employeeId, ReferenceDto reference)
+       
+
+        public async Task Add(Reference reference, Guid employeeId)
         {
-            var employee = await _dbContext.Employees.FindAsync(employeeId);
-            if (employee != null)
+            var employee = await _dbContext.Employees
+            .Include(e => e.References)
+            .FirstOrDefaultAsync(e => e.Id == EmployeeId.Create(employeeId));
+
+            if (employee == null)
             {
-                employee.References.Add(new Reference
-                (
-
-             reference.Name,
-             reference.ContactInformation
-
-                ));
+                throw new ArgumentException("EmployeeNotFound");
             }
-            await _dbContext.SaveChangesAsync();
-        }
-        public async Task<Employee?> GetEmployeeById(Guid employeeId)
-        {
-            return await _dbContext.Employees.FirstOrDefaultAsync(Employee => Employee.Id == employeeId);
 
+            employee.AddReferences(reference);
+            //    employee.EducationalBackgrounds.Add(educationalBackground);
+            await _dbContext.SaveChangesAsync();
+            // Save changes to the database
         }
+
+        public Task<Employee?> GetEmployeeById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+       
 
         public Task SaveAsync()
         {

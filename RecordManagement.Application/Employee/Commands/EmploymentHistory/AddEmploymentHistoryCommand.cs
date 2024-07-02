@@ -1,10 +1,15 @@
+using ErrorOr;
 using MediatR;
-using RecordManagement.Contracts.DTOs;
+using EmloymentHistories = RecordManagement.Domain.EmploymentHistories.EmploymentHistory;
 
 
 namespace RecordManagement.Application.Employee.Commands.EducationalBackground;
 
 public record AddEmployementHistoryCommand(
-Guid EmployeeId, 
-EmploymentHistoryDto Request) :
- IRequest<Domain.EmploymentHistories.EmploymentHistory>;
+        Guid EmployeeId,
+        string Employer,
+        string Position,
+        DateTime StartDate,
+        DateTime EndDate
+) :
+ IRequest<ErrorOr<EmloymentHistories>>;

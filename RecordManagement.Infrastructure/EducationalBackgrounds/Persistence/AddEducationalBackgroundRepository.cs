@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using RecordManagement.Application.Common.Interfaces;
-using RecordManagement.Contracts.DTOs;
 using RecordManagement.Domain.Educationalbackgrounds;
+using RecordManagement.Domain.Educationalbackgrounds.ValueObjects;
 using RecordManagement.Domain.Employees;
+using RecordManagement.Domain.Employees.ValueObjects;
 using RecordManagement.Infrastructure.Common.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace RecordManagement.Infrastructure.EducationalBackgrounds.Persistence
 {
@@ -21,34 +19,40 @@ namespace RecordManagement.Infrastructure.EducationalBackgrounds.Persistence
             _dbContext = dbContext;
         }
 
+ 
 
-        public async Task AddEducationalBackground(Guid employeeId, EducationalBackgroundDto educationalBackground)
+        public async Task Add(EducationalBackground educationalBackground, Guid employeeId)
         {
             var employee = await _dbContext.Employees
-                                           .Include(e => e.EducationalBackgrounds)
-                                           .FirstOrDefaultAsync(e => e.Id == employeeId);
+           .Include(e => e.EducationalBackgrounds)
+           .FirstOrDefaultAsync(e => e.Id == EmployeeId.Create(employeeId));
 
-            if (employee is null)
+            if (employee == null) 
             {
-                throw new Exception("Employee not found.");
+                throw new ArgumentException("EmployeeNotFound");
             }
 
-            employee.EducationalBackgrounds.Add(new EducationalBackground(
-
-              educationalBackground.Degree,
-              educationalBackground.School,
-              educationalBackground.YearGraduated
-          ));
-
+            employee.AddEducationalBackground(educationalBackground);
+            //    employee.EducationalBackgrounds.Add(educationalBackground);
             await _dbContext.SaveChangesAsync();
+            // Save changes to the database
+
+
         }
 
-
-        public async Task<Employee?> GetEmployeeById(Guid employeeId)
+        public async Task<Employee?> GetEmployeeById(Guid id)
         {
-            return await _dbContext.Employees.FirstOrDefaultAsync(Employee => Employee.Id == employeeId);
+            var employee = await _dbContext.Employees
+           .Include(e => e.EducationalBackgrounds)
+           .FirstOrDefaultAsync(e => e.Id == EmployeeId.Create(id));
 
+            if (employee == null)
+            {
+                throw new ArgumentException("EmployeeNotFound");
+            }
+            return employee;
         }
+  
 
         public Task SaveAsync()
         {
@@ -56,5 +60,37 @@ namespace RecordManagement.Infrastructure.EducationalBackgrounds.Persistence
             return Task.CompletedTask;
 
         }
+
+
+        /*  public async Task AddEducationalBackground(Guid employeeId, EducationalBackgroundDto educationalBackground)
+       {
+           var employee = await _dbContext.Employees
+                                          .Include(e => e.EducationalBackgrounds)
+                                          .FirstOrDefaultAsync(e => e.Id == employeeId);
+
+           if (employee is null)
+           {
+               throw new Exception("Employee not found.");
+           }
+
+           employee.EducationalBackgrounds.Add(new EducationalBackground(
+
+             educationalBackground.Degree,
+             educationalBackground.School,
+             educationalBackground.YearGraduated
+         ));
+
+           await _dbContext.SaveChangesAsync();
+       }*/
+
+
+        /*     public async Task<Employee?> GetEmployeeById(Guid employeeId)
+             {
+                 return await _dbContext.Employees.FirstOrDefaultAsync(Employee => Employee.Id == employeeId);
+
+             }*/
+
+
+
     }
 }

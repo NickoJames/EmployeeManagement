@@ -1,17 +1,14 @@
-﻿using RecordManagement.Contracts.DTOs;
-using RecordManagement.Domain.Employees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using RecordManagement.Domain.EmploymentHistories;
 using Employees = RecordManagement.Domain.Employees.Employee;
 
 namespace RecordManagement.Application.Common.Interfaces
 {
     public interface IEmployementHistoryRepository
     {
-    Task AddEmploymentHistory(Guid employeeId, EmploymentHistoryDto employmentHistory);
+        // Task AddEmploymentHistory(Guid employeeId, EmploymentHistoryDto employmentHistory);
+
+    Task Add(EmploymentHistory employmentHistory, Guid employeeId);
     Task<Employees?> GetEmployeeById(Guid id);
     Task SaveAsync();
     }

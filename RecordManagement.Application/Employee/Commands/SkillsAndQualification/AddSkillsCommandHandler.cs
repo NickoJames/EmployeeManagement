@@ -1,9 +1,12 @@
+using ErrorOr;
 using MediatR;
 using RecordManagement.Application.Common.Interfaces;
+using RecordManagement.Domain.SkillsAndQualifications;
+using Skills = RecordManagement.Domain.SkillsAndQualifications.SkillsAndQualification;
 
 namespace RecordManagement.Application.Employee.Commands.SkillsAndQualification;
 
-public class AddSkillCommandHandler : IRequestHandler<AddSkillCommand, Domain.SkillsAndQualifications.SkillsAndQualification>
+public class AddSkillCommandHandler : IRequestHandler<AddSkillCommand, ErrorOr< Skills>>
 {
 
         private readonly IAddSkillsRepository _employeeRepository;
@@ -13,26 +16,28 @@ public class AddSkillCommandHandler : IRequestHandler<AddSkillCommand, Domain.Sk
         _employeeRepository = employeeRepository;
     }
 
-    public async Task<Domain.SkillsAndQualifications.SkillsAndQualification> Handle(AddSkillCommand command ,CancellationToken cancellationToken)
+    public async Task<ErrorOr<Skills>> Handle(AddSkillCommand command ,CancellationToken cancellationToken)
     {
-        var employee = await _employeeRepository.GetEmployeeById(command.EmployeeId);
-        if (employee == null)
+        await Task.CompletedTask;
+
+        if (string.IsNullOrWhiteSpace(command.Skill))
         {
-            throw new Exception($"Employee with ID {command.EmployeeId} not found.");
+            return Error.Validation(code: "Skill Invalid", description: "Skill cannot be empty.");
         }
- 
 
-        var employmentHistory = new Domain.SkillsAndQualifications.SkillsAndQualification(
-            command.Request.Skill,
-            command.Request.Language
+        if (string.IsNullOrWhiteSpace(command.Language))
+        {
+            return Error.Validation(code: "Language Invalid", description: "Language cannot be empty.");
+        }
+        var skill = Skills.Create(
+            command.Skill,
+            command.Language
             );
-        
-        
-        
-        await _employeeRepository.AddSkill(command.EmployeeId ,command.Request);
-        await _employeeRepository.SaveAsync();
 
-       return employmentHistory;
+        await _employeeRepository.Add(skill , command.EmployeeId);
+     
+
+       return skill;
 
     }
 

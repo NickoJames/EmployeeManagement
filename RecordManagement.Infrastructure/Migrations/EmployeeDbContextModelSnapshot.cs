@@ -17,158 +17,21 @@ namespace RecordManagement.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.5");
 
-            modelBuilder.Entity("RecordManagement.Domain.Educationalbackgrounds.EducationalBackground", b =>
+            modelBuilder.Entity("RecordManagement.Domain.Employees.Employee", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("Degree")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("School")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("YearGraduated")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("EducationalBackgrounds");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("RecordManagement.Domain.Employees.Employee", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.EmploymentHistories.EmploymentHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("EmploymentHistories");
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.References.Reference", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("References");
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.SkillsAndQualifications.SkillsAndQualification", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.Educationalbackgrounds.EducationalBackground", b =>
-                {
-                    b.HasOne("RecordManagement.Domain.Employees.Employee", null)
-                        .WithMany("EducationalBackgrounds")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.Employees.Employee", b =>
-                {
-                    b.OwnsOne("RecordManagement.Domain.PersonalInformations.PersonalInformation", "PersonalInfo", b1 =>
-                        {
-                            b1.Property<Guid>("EmployeeId")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("BloodType")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("BloodType");
-
-                            b1.Property<string>("Citizenship")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("Citizenship");
-
-                            b1.Property<string>("CivilStatus")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("CivilStatus");
-
-                            b1.Property<DateTime>("DateOfBirth")
-                                .HasColumnType("TEXT")
-                                .HasColumnName("DateOfBirth");
-
-                            b1.Property<string>("FullName")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("FullName");
-
-                            b1.Property<string>("Gender")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("Gender");
-
-                            b1.Property<int>("Height")
-                                .HasColumnType("INTEGER")
-                                .HasColumnName("Height");
-
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("PlaceOfBirth")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("PlaceOfBirth");
-
-                            b1.Property<int>("Weight")
-                                .HasColumnType("INTEGER")
-                                .HasColumnName("Weight");
-
-                            b1.HasKey("EmployeeId");
-
-                            b1.ToTable("Employees");
-
-                            b1.WithOwner()
-                                .HasForeignKey("EmployeeId");
-                        });
-
                     b.OwnsOne("RecordManagement.Domain.ContactInformations.ContactInformation", "ContactInfo", b1 =>
                         {
-                            b1.Property<Guid>("Id")
+                            b1.Property<Guid>("EmployeeId")
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("EmailAddress")
@@ -196,57 +59,217 @@ namespace RecordManagement.Infrastructure.Migrations
                                 .HasColumnType("TEXT")
                                 .HasColumnName("PresentAddress");
 
-                            b1.HasKey("Id");
+                            b1.HasKey("EmployeeId");
 
                             b1.ToTable("Employees");
 
                             b1.WithOwner()
-                                .HasForeignKey("Id");
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.OwnsMany("RecordManagement.Domain.Educationalbackgrounds.EducationalBackground", "EducationalBackgrounds", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("EducationalBackgroundId");
+
+                            b1.Property<string>("Degree")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Degree");
+
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("School")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("School");
+
+                            b1.Property<int>("YearGraduated")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("YearGraduated");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("EmployeeId");
+
+                            b1.ToTable("EducationalBackgrounds", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.OwnsMany("RecordManagement.Domain.EmploymentHistories.EmploymentHistory", "EmploymentHistories", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Employer")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Employer");
+
+                            b1.Property<DateTime>("EndDate")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("EndDate");
+
+                            b1.Property<string>("Position")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Position");
+
+                            b1.Property<DateTime>("StartDate")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("StartDate");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("EmployeeId");
+
+                            b1.ToTable("EmploymentHistories", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.OwnsOne("RecordManagement.Domain.PersonalInformations.PersonalInformation", "PersonalInfo", b1 =>
+                        {
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("BloodType")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("BloodType");
+
+                            b1.Property<string>("Citizenship")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Citizenship");
+
+                            b1.Property<string>("CivilStatus")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CivilStatus");
+
+                            b1.Property<DateTime>("DateOfBirth")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("DateOfBirth");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("FirstName");
+
+                            b1.Property<string>("Gender")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Gender");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("Height");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("LastName");
+
+                            b1.Property<string>("MidlleName")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("MiddleName");
+
+                            b1.Property<string>("PlaceOfBirth")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("PlaceOfBirth");
+
+                            b1.Property<int>("Weight")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("Weight");
+
+                            b1.HasKey("EmployeeId");
+
+                            b1.ToTable("Employees");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.OwnsMany("RecordManagement.Domain.References.Reference", "References", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("ContactInformation")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("ContactInformation");
+
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Name");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("EmployeeId");
+
+                            b1.ToTable("References", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.OwnsMany("RecordManagement.Domain.SkillsAndQualifications.SkillsAndQualification", "SkillsAndQualifications", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("EmployeeId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Language")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Language");
+
+                            b1.Property<string>("Skill")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Skill");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("EmployeeId");
+
+                            b1.ToTable("Skills", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
                         });
 
                     b.Navigation("ContactInfo")
                         .IsRequired();
 
-                    b.Navigation("PersonalInfo")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.EmploymentHistories.EmploymentHistory", b =>
-                {
-                    b.HasOne("RecordManagement.Domain.Employees.Employee", null)
-                        .WithMany("EmploymentHistories")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.References.Reference", b =>
-                {
-                    b.HasOne("RecordManagement.Domain.Employees.Employee", null)
-                        .WithMany("References")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.SkillsAndQualifications.SkillsAndQualification", b =>
-                {
-                    b.HasOne("RecordManagement.Domain.Employees.Employee", null)
-                        .WithMany("Skills")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RecordManagement.Domain.Employees.Employee", b =>
-                {
                     b.Navigation("EducationalBackgrounds");
 
                     b.Navigation("EmploymentHistories");
 
+                    b.Navigation("PersonalInfo")
+                        .IsRequired();
+
                     b.Navigation("References");
 
-                    b.Navigation("Skills");
+                    b.Navigation("SkillsAndQualifications");
                 });
 #pragma warning restore 612, 618
         }

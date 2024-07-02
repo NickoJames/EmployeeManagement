@@ -1,18 +1,22 @@
 using Microsoft.OpenApi.Models;
 using RecordManagement.Application;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Mvc;
+
+using RecordManagement.Api;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
+{
+    // Configure services
+    builder.Services
+        .AddPresentation()
+        .AddApplication()
+        .AddInfrastructure(builder.Configuration)
+        ;
+    builder.Services.AddControllers();
+    }
 
-// Configure services
-builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration);
 
-builder.Services.AddControllers();
 
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
@@ -23,7 +27,7 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Configure middleware
-
+//app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

@@ -1,33 +1,59 @@
-using System.ComponentModel.DataAnnotations;
+using RecordManagement.Domain.Common.Models;
+using RecordManagement.Domain.Educationalbackgrounds.ValueObjects;
+using RecordManagement.Domain.Employees;
+using RecordManagement.Domain.Employees.ValueObjects;
+
 
 namespace RecordManagement.Domain.Educationalbackgrounds;
-    public class EducationalBackground
+    public sealed class EducationalBackground : Entity<EducationalBackgroundId>
     {
-
-        [Key]
-
-        public Guid Id { get; set; }
-         public Guid EmployeeId { get; set; }
+      
+        
+     
         public string Degree { get; private set; }
         public string School { get; private set;}
         public int YearGraduated { get;private set; }
 
-        public EducationalBackground(string degree, string school, int yearGraduated)
+        private EducationalBackground(
+
+            string degree, 
+            string school, 
+            int yearGraduated   
+            
+
+            ) : base (EducationalBackgroundId.CreateUnique())
         {
-          
+
+           
             Degree = degree;
             School = school;
             YearGraduated = yearGraduated;
+          
+        }
+
+        public static EducationalBackground Create(
+             
+              
+                string degree,
+                string school,
+                int yearGraduated
+
+            ) 
+        {
+            return new EducationalBackground(
+          
+                degree, 
+                school,
+                yearGraduated );
         }
 
 
 
         
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618
     public EducationalBackground() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-
+#pragma warning restore CS8618 
 
 
 

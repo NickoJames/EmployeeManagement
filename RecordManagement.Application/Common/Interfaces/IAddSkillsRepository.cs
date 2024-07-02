@@ -1,5 +1,6 @@
-﻿using RecordManagement.Contracts.DTOs;
+﻿
 using RecordManagement.Domain.Employees;
+using RecordManagement.Domain.SkillsAndQualifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace RecordManagement.Application.Common.Interfaces
 {
     public interface IAddSkillsRepository
     {
-        Task AddSkill(Guid employeeId, SkillsAndQualificationsDto skill);
+        //  Task AddSkill(Guid employeeId, SkillsAndQualificationsDto skill);
+        Task Add(SkillsAndQualification skillsAndQualification , Guid EmployeeId);
         Task<Employees?> GetEmployeeById(Guid id);
         Task SaveAsync();
     }

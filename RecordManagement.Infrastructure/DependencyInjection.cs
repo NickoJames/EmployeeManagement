@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IAddSkillsRepository, AddskillReposistory>();
         services.AddScoped<IEducationalBackgroundRepository, AddEducationalBackgroundRepository>();
         services.AddScoped<IEmployementHistoryRepository, AddEmploymentHistoriesRepository>();
+       
 
         return services;
 

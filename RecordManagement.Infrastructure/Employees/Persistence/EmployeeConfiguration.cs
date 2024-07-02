@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RecordManagement.Domain.Educationalbackgrounds.ValueObjects;
 using RecordManagement.Domain.Employees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
+using RecordManagement.Domain.Employees.ValueObjects;
+using RecordManagement.Infrastructure.EducationalBackgrounds.Persistence;
+
 
 namespace RecordManagement.Infrastructure.Employees.Persistence
 {
@@ -14,11 +12,21 @@ namespace RecordManagement.Infrastructure.Employees.Persistence
     {
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
+            builder.ToTable("Employees");
+
             builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id)
+            .ValueGeneratedNever()
+            .HasConversion(
+                id  => id.Value,
+                value => EmployeeId.Create(value)
+             );
 
             builder.OwnsOne(e => e.PersonalInfo, pi =>
             {
-                pi.Property(p => p.FullName).HasColumnName("FullName");
+                pi.Property(p => p.FirstName).HasColumnName("FirstName");
+                pi.Property(p => p.MidlleName).HasColumnName("MiddleName");
+                pi.Property(p => p.LastName).HasColumnName("LastName");
                 pi.Property(p => p.DateOfBirth).HasColumnName("DateOfBirth");
                 pi.Property(p => p.PlaceOfBirth).HasColumnName("PlaceOfBirth");
                 pi.Property(p => p.Gender).HasColumnName("Gender");
@@ -37,6 +45,9 @@ namespace RecordManagement.Infrastructure.Employees.Persistence
                 ci.Property(c => c.MobileNumber).HasColumnName("MobileNumber");
                 ci.Property(c => c.EmailAddress).HasColumnName("EmailAddress");
             });
+
+
+    
         }
     }
 }

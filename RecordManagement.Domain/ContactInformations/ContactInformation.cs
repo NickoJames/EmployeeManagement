@@ -1,18 +1,17 @@
-using System.ComponentModel.DataAnnotations;
+
 namespace RecordManagement.Domain.ContactInformations;
 
 
 
  public class ContactInformation
     {
-        [Key]
-        public Guid Id { get; set; }
        
-        public string PermanentAddress { get; }
-        public string PresentAddress { get; }
-        public string PhoneNumber { get; }
-        public string MobileNumber { get; }
-        public string EmailAddress { get; }
+    
+        public string PermanentAddress { get; private set; }
+        public string PresentAddress { get; private set; }
+        public string PhoneNumber { get; private set; }
+        public string MobileNumber { get; private set; }
+        public string EmailAddress { get; private set; }
 
         public ContactInformation(string permanentAddress, string presentAddress, string phoneNumber, string mobileNumber, string emailAddress)
         {
@@ -22,10 +21,24 @@ namespace RecordManagement.Domain.ContactInformations;
             MobileNumber = mobileNumber;
             EmailAddress = emailAddress;
         }
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    private ContactInformation() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+        public static ContactInformation create(
+          string permanentAddress,
+          string presentAddress,
+          string phoneNumber,
+          string mobileNumber,
+          string emailAddress
+            ) {
+        return new ContactInformation(permanentAddress,presentAddress,phoneNumber,mobileNumber,emailAddress);
+            }
 
+
+
+
+
+
+#pragma warning disable CS8618 
+    private ContactInformation() { }
+#pragma warning restore CS8618 
 
 
 

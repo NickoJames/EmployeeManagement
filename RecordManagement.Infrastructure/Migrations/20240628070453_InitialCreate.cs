@@ -16,8 +16,9 @@ namespace RecordManagement.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PersonalInfo_Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FullName = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    MiddleName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
                     PlaceOfBirth = table.Column<string>(type: "TEXT", nullable: false),
                     Gender = table.Column<string>(type: "TEXT", nullable: false),
@@ -41,15 +42,15 @@ namespace RecordManagement.Infrastructure.Migrations
                 name: "EducationalBackgrounds",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EducationalBackgroundId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Degree = table.Column<string>(type: "TEXT", nullable: false),
                     School = table.Column<string>(type: "TEXT", nullable: false),
-                    YearGraduated = table.Column<int>(type: "INTEGER", nullable: false)
+                    YearGraduated = table.Column<int>(type: "INTEGER", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EducationalBackgrounds", x => x.Id);
+                    table.PrimaryKey("PK_EducationalBackgrounds", x => x.EducationalBackgroundId);
                     table.ForeignKey(
                         name: "FK_EducationalBackgrounds_Employees_EmployeeId",
                         column: x => x.EmployeeId,
@@ -63,6 +64,10 @@ namespace RecordManagement.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Employer = table.Column<string>(type: "TEXT", nullable: false),
+                    Position = table.Column<string>(type: "TEXT", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -80,14 +85,17 @@ namespace RecordManagement.Infrastructure.Migrations
                 name: "References",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ContactInformation = table.Column<string>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_References", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_References_Employees_Id",
-                        column: x => x.Id,
+                        name: "FK_References_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -98,6 +106,8 @@ namespace RecordManagement.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Skill = table.Column<string>(type: "TEXT", nullable: false),
+                    Language = table.Column<string>(type: "TEXT", nullable: false),
                     EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -119,6 +129,11 @@ namespace RecordManagement.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_EmploymentHistories_EmployeeId",
                 table: "EmploymentHistories",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_References_EmployeeId",
+                table: "References",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(

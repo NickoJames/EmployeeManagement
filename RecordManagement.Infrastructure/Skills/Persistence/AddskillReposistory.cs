@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecordManagement.Application.Common.Interfaces;
-using RecordManagement.Contracts.DTOs;
+
 using RecordManagement.Domain.Employees;
+using RecordManagement.Domain.Employees.ValueObjects;
 using RecordManagement.Domain.SkillsAndQualifications;
 using RecordManagement.Infrastructure.Common.Persistence;
 using System;
@@ -22,26 +23,29 @@ namespace RecordManagement.Infrastructure.Skills.Persistence
             _dbContext = dbContext;
         }
 
-        public async Task AddSkill(Guid employeeId, SkillsAndQualificationsDto skill)
+     
+
+        public async Task Add(SkillsAndQualification skillsAndQualification, Guid employeeId)
         {
-            var employee = await _dbContext.Employees.FindAsync(employeeId);
-            if (employee != null)
+            var employee = await _dbContext.Employees
+            .Include(e => e.EducationalBackgrounds)
+            .FirstOrDefaultAsync(e => e.Id == EmployeeId.Create(employeeId));
+
+            if (employee == null)
             {
-                employee.Skills.Add(new SkillsAndQualification
-                (
-
-                skill.Language,
-                skill.Skill
-
-                ));
+                throw new ArgumentException("EmployeeNotFound");
             }
+
+            employee.AddSkills(skillsAndQualification);
+            
             await _dbContext.SaveChangesAsync();
+      
+
         }
 
-        public async Task<Employee?> GetEmployeeById(Guid employeeId)
+        public Task<Employee?> GetEmployeeById(Guid id)
         {
-            return await _dbContext.Employees.FirstOrDefaultAsync(Employee => Employee.Id == employeeId);
-
+            throw new NotImplementedException();
         }
 
         public Task SaveAsync()
@@ -50,5 +54,6 @@ namespace RecordManagement.Infrastructure.Skills.Persistence
             return Task.CompletedTask;
 
         }
+
     }
 }
